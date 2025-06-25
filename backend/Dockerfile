@@ -4,8 +4,8 @@ WORKDIR /build
 COPY . .
 RUN chmod +x ./mvnw && ./mvnw clean package -DskipTests
 
-# 2. Run stage
-FROM openjdk:21-jdk-slim
+# 2. Run stage 
+FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=builder /build/target/hotelBooking-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
