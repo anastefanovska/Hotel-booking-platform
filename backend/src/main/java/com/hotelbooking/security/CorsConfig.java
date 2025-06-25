@@ -23,8 +23,7 @@ public class CorsConfig {
     public FilterRegistrationBean<CorsFilter> corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        //config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173"));
-        config.addAllowedOriginPattern("*");
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173"));
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,

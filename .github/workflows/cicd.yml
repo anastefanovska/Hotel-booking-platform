@@ -1,4 +1,4 @@
-name: CI/CD
+name: CI
 
 on:
   push:
@@ -31,28 +31,7 @@ jobs:
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hotel-booking-platform-backend:latest ./backend
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/hotel-booking-platform-backend:latest
 
-      - name: Inject API URL and Build + Push Frontend Image
+      - name: Build and Push Frontend Image
         run: |
-          echo "VITE_API_BASE_URL=http://${{ secrets.EC2_PUBLIC_IP }}:8080" > ./frontend/.env
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hotel-booking-platform-frontend:latest ./frontend
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/hotel-booking-platform-frontend:latest
-
-      - name: Setup SSH key for EC2
-        run: |
-          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ec2.pem
-          chmod 600 ec2.pem
-
-      - name: Copy docker-compose and .env to EC2
-        run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-          scp -i ec2.pem -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ secrets.EC2_PUBLIC_IP }}:/home/ec2-user/
-          scp -i ec2.pem -o StrictHostKeyChecking=no .env ec2-user@${{ secrets.EC2_PUBLIC_IP }}:/home/ec2-user/
-
-      - name: SSH into EC2 and Deploy
-        run: |
-          ssh -i ec2.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
-            cd /home/ec2-user
-            docker-compose --env-file .env down || true
-            docker-compose --env-file .env pull
-            docker-compose --env-file .env up -d --remove-orphans
-          EOF
