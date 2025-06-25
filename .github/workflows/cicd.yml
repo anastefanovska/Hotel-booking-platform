@@ -9,7 +9,7 @@ on:
       - 'frontend/**'
       - 'docker-compose.yml'
       - '.github/workflows/**'
-     
+  workflow_dispatch:  
 
 jobs:
   dockerize-and-deploy:
