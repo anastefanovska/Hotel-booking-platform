@@ -9,6 +9,7 @@ on:
       - 'frontend/**'
       - 'docker-compose.yml'
       - '.github/workflows/**'
+     
 
 jobs:
   dockerize-and-deploy:
@@ -50,7 +51,7 @@ jobs:
         run: |
           ssh -i ec2.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
             cd /home/ec2-user
-            docker compose --env-file .env down || true
-            docker compose --env-file .env pull
-            docker compose --env-file .env up -d --remove-orphans
+            docker-compose --env-file .env down || true
+            docker-compose --env-file .env pull
+            docker-compose --env-file .env up -d --remove-orphans
           EOF
