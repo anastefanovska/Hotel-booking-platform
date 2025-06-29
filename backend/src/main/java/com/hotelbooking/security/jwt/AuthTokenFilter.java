@@ -28,11 +28,24 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
+//    @Override
+//    protected boolean shouldNotFilter(HttpServletRequest request) {
+//        String path = request.getServletPath();
+//        System.out.println("Filter check: " + path);
+//        return path.startsWith("/auth/register-user") || path.startsWith("/auth/login");
+//    }
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
         System.out.println("Filter check: " + path);
-        return path.startsWith("/auth/register-user") || path.startsWith("/auth/login");
+
+        return path.startsWith("/auth/")
+                || path.startsWith("/api/auth/")
+                || path.startsWith("/rooms/")
+                || path.startsWith("/api/rooms/")
+                || path.startsWith("/bookings/")
+                || path.startsWith("/api/bookings/");
     }
 
     @Override
